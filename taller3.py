@@ -33,7 +33,7 @@ if opcion == '1':
     if row is not None :
         juego(user_name)
     else :
-        print("error")
+        print("error al ingresar los datos ")
     conn.commit()
     conn.close()
     
@@ -52,11 +52,18 @@ elif opcion == '2':
         host = "localhost",
         port = "5432"
     )
-    cur = connect.cursor()
-    query = '''INSERT INTO entrenador (nombre, password ,nombre_usuario , fecha_nac , edad) VALUES (%s,%s,%s,%s,%s)'''
-
-    cur.execute(query,(username,password,nickname,fecha,age))
-    print("Data Saved")
+    cursor = connect.cursor()
+    q1 = '''select * from entrenador where password =%s and nombre = %s'''
+    cursor.execute(q1,(password, username))
+    row = cursor.fetchone()
+    if row is not None:
+      print("el usuario ya esta registrado")
+    else:
+     cursor = connect.cursor()
+     query = '''INSERT INTO entrenador (nombre, password ,nombre_usuario , fecha_nac , edad) VALUES (%s,%s,%s,%s,%s)'''
+     cursor.execute(query,(username,password,nickname,fecha,age))
+     print("Data Saved")
+    print("End")
 
     connect.commit()
     connect.close()
